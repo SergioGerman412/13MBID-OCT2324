@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Se realiza la lectura de los datos
 df = pd.read_csv("../../../data/final/datos_finales.csv", sep=";")
@@ -76,3 +77,50 @@ plt.legend(title='Falta de Pago', labels=['No', 'Sí'])
 
 # Mostrar el gráfico con Streamlit
 st.pyplot(fig)
+
+
+#Gráfica relación entre el objetivo de crédito y falta de pago
+
+custom_colors = {'N': 'green', 'Y': 'red'}
+
+plt.figure(figsize=(10, 6))
+ax = sns.countplot(x='objetivo_credito', hue='falta_pago', data=df, palette=custom_colors)
+
+# Agregar conteo redondeado en la parte superior de cada barra
+for p in ax.patches:
+    height = p.get_height()
+    ax.annotate(f'{round(height)}', (p.get_x() + p.get_width() / 2., height), ha='center', va='bottom', fontsize=10, color='black', xytext=(0, 5), textcoords='offset points')
+
+plt.title('Relación entre el objetivo del crédito y la falta de pago')
+plt.xlabel('Objetivo del crédito')
+plt.ylabel('Número de préstamos')
+plt.xticks(rotation=45)
+plt.legend(title='Falta de Pago', labels=['No', 'Sí'])
+
+st.pyplot(plt)
+
+#Gráfica de distribución de niveles educativos de los clientes
+
+def plot_niveles_educativos(df):
+    # Obtener el conteo de cada nivel educativo
+    conteo_nivel_educativo = df['nivel_educativo'].value_counts()
+
+    # Crear el gráfico de barras de la distribución de niveles educativos
+    fig, ax = plt.subplots(figsize=(8, 6))
+    grafico = conteo_nivel_educativo.plot(kind='bar', color='skyblue', ax=ax)
+
+    # Agregar el conteo encima de cada barra
+    for indice, valor in enumerate(conteo_nivel_educativo):
+        ax.text(indice, valor + 0.1, str(valor), ha='center', va='bottom')
+
+    plt.title('Distribución de Niveles Educativos de los Clientes')
+    plt.xlabel('Nivel Educativo')
+    plt.ylabel('Número de Clientes')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+
+    # Mostrar el gráfico en Streamlit
+    st.pyplot(fig)
+
+# Llamar a la función con el dataframe 'df'
+plot_niveles_educativos(df)
