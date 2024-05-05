@@ -10,6 +10,7 @@ Prof: Dr. Horacio Kuna
 Dictado: OCT23-24
 
 Alumno: Sergio German
+        Gianmarcos Espinoza
 
 ## Descripción del contenido
 
